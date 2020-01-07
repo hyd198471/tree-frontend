@@ -45,8 +45,6 @@ const Tree: React.FC = () => {
         dispatch(getRootNode())
     },[]);
 
-    console.log("Tree", tree);
-
     return (
         <TreeView
             className={classes.root}
