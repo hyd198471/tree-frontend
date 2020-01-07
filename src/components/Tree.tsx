@@ -1,13 +1,13 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
-import TreeView from '@material-ui/lab/TreeView';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import TreeItem from '@material-ui/lab/TreeItem';
-import {connect} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootStore} from "../store/rootStore";
 import {getRootNode} from "../store/tree/TreeAction";
-import {TreeStore} from "../store/tree/TreeReducer";
+import {TreeNode} from "../store/tree/TreeReducer";
+import {TreeView} from "@material-ui/lab";
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import TreeItem from "@material-ui/lab/TreeItem";
 
 const useStyles = makeStyles({
     root: {
@@ -17,39 +17,47 @@ const useStyles = makeStyles({
     },
 });
 
-interface Props {
-    tree: TreeStore
-    getRootNode: () => any
+const TreeRender = (treeNode: TreeNode) => {
+    const isChildren = treeNode.children !== null && treeNode.children.length !== 0;
+    if (isChildren) {
+        return (
+            <TreeItem key={treeNode.data} nodeId={treeNode.nodeId.toString()} label={treeNode.data}>
+                {treeNode.children.map((node, idx) => TreeRender(node))}
+            </TreeItem>
+        );
+    }
+    return <TreeItem key={treeNode.data} nodeId={treeNode.nodeId.toString()} label={treeNode.data} />;
+};
 
-}
-const Tree: React.FC<Props> = (props) => {
+
+const Tree: React.FC = () => {
     const classes = useStyles();
+
+    const [expanded, setExpanded] = useState<string[]>([]);
+
+    const handleChange= (event: React.ChangeEvent<{}>, nodes: string[]) => {
+        setExpanded(nodes);
+    }
+    const tree= useSelector((state : RootStore) => state.tree.treeNode);
+    const dispatch = useDispatch();
+
+    useEffect(()=>{
+        dispatch(getRootNode())
+    },[]);
+
+    console.log("Tree", tree);
 
     return (
         <TreeView
             className={classes.root}
             defaultCollapseIcon={<ExpandMoreIcon />}
             defaultExpandIcon={<ChevronRightIcon />}
+            expanded={expanded}
+            onNodeToggle={handleChange}
         >
-            <TreeItem nodeId="1" label="Applications">
-                <TreeItem nodeId="2" label="Calendar" />
-                <TreeItem nodeId="3" label="Chrome" />
-                <TreeItem nodeId="4" label="Webstorm" />
-            </TreeItem>
-            <TreeItem nodeId="5" label="Documents">
-                <TreeItem nodeId="6" label="Material-UI">
-                    <TreeItem nodeId="7" label="src">
-                        <TreeItem nodeId="8" label="index.js" />
-                        <TreeItem nodeId="9" label="tree-view.js" />
-                    </TreeItem>
-                </TreeItem>
-            </TreeItem>
+            {tree && TreeRender(tree)}
         </TreeView>
     );
 };
 
-export default connect(
-    (store: RootStore) => ({
-        tree: store.tree
-    }),{getRootNode}
-)(Tree);
+export default Tree

@@ -3,9 +3,8 @@ import axios, {AxiosInstance, AxiosRequestConfig} from 'axios';
 const HTTP_STATUS_UNAUTHORIZED = 401;
 
 const options: AxiosRequestConfig = {
-    headers: {"WW-App-Version": "1.6.0"},
-    withCredentials: true,
     baseURL: process.env.REACT_APP_API_URL,
+    withCredentials: false,
 };
 
 class RestClient {

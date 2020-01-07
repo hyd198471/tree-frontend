@@ -1,8 +1,8 @@
-import {TreeReducer, TreeStore} from "./tree/TreeReducer";
+import {TreeReducer, TreeState} from "./tree/TreeReducer";
 import {configureStore} from "@reduxjs/toolkit";
 
 export interface RootStore {
-    tree: TreeStore
+    tree: TreeState
 }
 
 export default configureStore({

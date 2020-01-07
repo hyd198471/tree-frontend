@@ -8,31 +8,31 @@ export interface TreeNode {
     children: TreeNode[]
 }
 
-export interface TreeStore {
-    data: TreeNode | null
+export interface TreeState {
+    treeNode: TreeNode | null
     loading: boolean
     errors: string[]
 }
 
-const initialState: TreeStore = {
-    data: null,
+const initialState: TreeState = {
+    treeNode: null,
     loading: false,
     errors: []
 }
 
 export const TreeReducer= createReducer(initialState, {
-    ['GET_ROOT_NODE']: (state: TreeStore) => {
+    ['GET_ROOT_NODE']: (state: TreeState) => {
         state.loading = true;
         state.errors= [];
-        state.data=null;
+        state.treeNode=null;
     },
-    ['GET_ROOT_NODE_SUCCESS']: (state: TreeStore, action) => {
-        state.data = action.payload.data;
+    ['GET_ROOT_NODE_SUCCESS']: (state: TreeState, action) => {
+        state.treeNode = action.payload.data;
         state.loading= false;
         state.errors= [];
-    },['GET_ROOT_NODE_FAILURE']: (state: TreeStore, action) => {
+    },['GET_ROOT_NODE_FAILURE']: (state: TreeState, action) => {
         state.loading=false;
-        state.data= null;
+        state.treeNode= null;
         state.errors= action.payload.errors;
     }
 });
