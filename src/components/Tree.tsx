@@ -18,7 +18,7 @@ const useStyles = makeStyles({
 });
 
 const TreeRender = (treeNode: TreeNode) => {
-    const isChildren = treeNode.children !== null && treeNode.children.length !== 0;
+    const isChildren = treeNode.children !== null;
     if (isChildren) {
         return (
             <TreeItem key={treeNode.data} nodeId={treeNode.nodeId.toString()} label={treeNode.data}>
