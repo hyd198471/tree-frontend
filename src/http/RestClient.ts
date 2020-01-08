@@ -1,6 +1,5 @@
 import axios, {AxiosInstance, AxiosRequestConfig} from 'axios';
 
-const HTTP_STATUS_UNAUTHORIZED = 401;
 
 const options: AxiosRequestConfig = {
     baseURL: process.env.REACT_APP_API_URL,

@@ -43,7 +43,7 @@ const Tree: React.FC = () => {
 
     useEffect(()=>{
         dispatch(getRootNode())
-    },[]);
+    },[dispatch]);
 
     return (
         <TreeView
