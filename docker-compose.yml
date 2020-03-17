@@ -5,7 +5,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    image: tree-frontend
+    image: projektmanagement-frontend
     volumes:
       - '.:/app'
       - '/app/node_modules'

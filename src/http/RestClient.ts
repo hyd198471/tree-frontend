@@ -1,14 +1,14 @@
 import axios, {AxiosInstance, AxiosRequestConfig} from 'axios';
 
+const HTTP_STATUS_UNAUTHORIZED = 401;
 
 const options: AxiosRequestConfig = {
+    withCredentials: true,
     baseURL: process.env.REACT_APP_API_URL,
-    withCredentials: false,
 };
 
 class RestClient {
     private readonly _restService: AxiosInstance;
-
     constructor(options: AxiosRequestConfig) {
         this._restService = axios.create(options);
     }
