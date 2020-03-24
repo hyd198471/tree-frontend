@@ -41,22 +41,24 @@ export function loginAction(credentials: LoginCredentials) {
     return async function (dispatch: ThunkDispatch<RootStore,void, AnyAction>) {
         dispatch({type:LOGIN});
         try {
-            await RestClient.post('auth/login',credentials);
+            await RestClient.post('api/auth/login',credentials);
             const {data}: { data: User } = await RestClient.get<User>(ME_ENDPOINT);
 
-            validateRoleAfterLogin(data,dispatch);
+            validateRoleAfterLogin(data, dispatch);
         }catch (error) {
             dispatch(loginErrorAction(error))
 
         }
     }
 }
-
+function hasSubArray(master :any, sub:any) {
+    return sub.every((i => (v: any) => i = master.indexOf(v, i) + 1)(0));
+}
 function validateRoleAfterLogin(userData: User, dispatch: ThunkDispatch<RootStore, void, AnyAction>) {
-    if([ADMIN, CUSTOMER, DEVELOPER, OPS].includes(userData.role)) {
+    if(hasSubArray([ADMIN, CUSTOMER, DEVELOPER, OPS],userData.roles)) {
         dispatch(loginSuccessAction(userData));
+        dispatch(goTo(Route.SEARCH_USER));
     } else {
-        dispatch(logoutAction());
         dispatch(loginErrorAction())
     }
 }
@@ -65,7 +67,7 @@ export function logoutAction() {
     return async function (dispatch: ThunkDispatch<RootStore, void, AnyAction>) {
         dispatch({type: LOGOUT});
         try {
-            await RestClient.post('auth/me/logout');
+            await RestClient.post('api/auth/me/logout');
             dispatch({type: LOGOUT_SUCCESS});
         } catch (error) {
             console.error("error", error);

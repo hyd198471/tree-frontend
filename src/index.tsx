@@ -4,11 +4,11 @@ import './index.css';
 import App from './App';
 import {Provider} from "react-redux";
 import store from './store/rootStore';
-import {LOGIN} from "./store/user/userActions";
 
 ReactDOM.render(
+    // tslint:disable-next-line:jsx-wrap-multiline
     <Provider store={store}>
-        <App goto={() => {}}/>
+        <App />
     </Provider>,
     document.getElementById('root')
 );

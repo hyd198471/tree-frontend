@@ -15,7 +15,7 @@ import {createReducer} from "@reduxjs/toolkit";
 
 export interface User {
     email: string
-    role: string
+    roles: string[]
 }
 
 export interface UserStore {

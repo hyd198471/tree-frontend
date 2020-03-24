@@ -3,7 +3,6 @@ import React from "react";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
@@ -16,7 +15,8 @@ import Container from '@material-ui/core/Container';
 import {connect} from "react-redux";
 import {RootStore} from "../../store/rootStore";
 import {loginAction} from "../../store/user/userActions";
-import {Formik, FormikHelpers, FormikProps} from "formik";
+import {Formik, FormikHelpers, FormikProps, Field, Form} from "formik";
+import { TextField } from 'formik-material-ui';
 
 
 export interface LoginCredentials {
@@ -84,33 +84,21 @@ const LoginForm: React.FC<Props> = (props) => {
                 <Formik initialValues={initialValues} onSubmit={handleFormSubmit}>
                     {/* tslint:disable-next-line:jsx-no-multiline-js */}
                     {(formProps: FormikProps<LoginCredentials>) => (
-                        <form className={classes.form} noValidate={true} onSubmit={formProps.handleSubmit}>
-                            <TextField
-                                variant="outlined"
-                                margin="normal"
-                                required={true}
-                                fullWidth={true}
-                                id="email"
-                                label="Email Address"
-                                name="email"
-                                value={formProps.values.username}
-                                onChange={formProps.handleChange}
-                                autoComplete="email"
-                                autoFocus={true}
+                        <Form className={classes.form} noValidate={true} onSubmit={formProps.handleSubmit}>
+                            <Field
+                                component={TextField}
+                                name="username"
+                                type="username"
+                                label="Username"
                             />
-                            <TextField
-                                variant="outlined"
-                                margin="normal"
-                                required={true}
-                                fullWidth={true}
-                                name="password"
-                                label="Password"
+                            <br />
+                            <Field
+                                component={TextField}
                                 type="password"
-                                id="password"
-                                value={formProps.values.password}
-                                onChange={formProps.handleChange}
-                                autoComplete="current-password"
+                                label="Password"
+                                name="password"
                             />
+                            <br />
                             <FormControlLabel
                                 control={<Checkbox value="remember" color="primary"/>}
                                 label="Remember me"
@@ -137,7 +125,7 @@ const LoginForm: React.FC<Props> = (props) => {
                                     </Link>
                                 </Grid>
                             </Grid>
-                        </form>
+                        </Form>
                     )}
                 </Formik>
             </div>
@@ -146,7 +134,7 @@ const LoginForm: React.FC<Props> = (props) => {
             </Box>
         </Container>
     );
-}
+};
 
 export default connect(
     (store: RootStore) => ({user: store.user}),
