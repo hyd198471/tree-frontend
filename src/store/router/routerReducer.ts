@@ -1,10 +1,10 @@
 import {Route} from "../../Router";
-import {createReducer} from "@reduxjs/toolkit";
 import {GO_TO} from "./routerActions";
-import history from "../../history";
+import history from "../../app/history";
+import {createReducer} from "@reduxjs/toolkit";
 
 export interface RouterStore {
-    currentRoute: Route.LOGIN
+    currentRoute: Route;
 }
 
 const initialState: RouterStore = {

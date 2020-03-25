@@ -1,0 +1,42 @@
+.logo {
+    width: 20%;
+    position: relative;
+
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -0%);
+}
+
+
+.mviHeading {
+    text-align: center;
+    color: var(--primary);
+    padding: 3em;
+}
+
+.text {
+    margin: auto;
+    width: 50%;
+}
+
+.searchBar {
+    margin: auto;
+    width: 50%;
+}
+
+.searchUserIdBar {
+    margin: auto;
+    width: 50%;
+    padding-top: 17em;
+    text-align: center;
+}
+
+.icon {
+    color: var(--dark);
+}
+
+.input {
+    border-top-color: var(--dark) !important;
+    border-left-color: var(--dark) !important;
+    border-bottom-color: var(--dark) !important;
+}

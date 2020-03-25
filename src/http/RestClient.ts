@@ -28,8 +28,7 @@ class RestClient {
             });
         this._restService.interceptors.response.use((response: AxiosResponse) => {
             let authorization = response.headers['authorization'];
-            let accessToken = localStorage.getItem("access_token");
-            if(authorization && ! accessToken) {
+            if(authorization) {
                 let authorizationHeaders = authorization.split(" ");
                 localStorage.setItem("access_token", authorizationHeaders[1]);
             }
@@ -39,11 +38,10 @@ class RestClient {
             if (error.response && error.response.status === 401) {
                 const originalRequest: AxiosRequestConfig = error.config;
 
-                const accessToken = localStorage.getItem("access_token");
                 const authorization = originalRequest.headers['Authorization'];
                 let authorizationHeaders = authorization && authorization.split(" ");
 
-                if (!accessToken && authorization && authorizationHeaders.length === 2) {
+                if (authorization && authorizationHeaders.length === 2) {
                     localStorage.setItem("access_token", authorizationHeaders[1]);
                     axios.defaults.headers.common['Authorization'] = 'Bearer ' + authorizationHeaders[1];
                     return axios(originalRequest);

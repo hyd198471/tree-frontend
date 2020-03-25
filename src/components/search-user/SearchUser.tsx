@@ -1,21 +1,19 @@
 import {SearchUserStore} from "../../store/search-user/searchUserReducer";
 import {Formik, FormikHelpers, FormikProps} from "formik";
-import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import Container from "@material-ui/core/Container";
 import React from "react";
 import {connect} from "react-redux";
 
-import {makeStyles} from "@material-ui/core/styles";
 import {RootStore} from "../../store/rootStore";
 import {searchUser} from "../../store/search-user/searchUserActions";
+import {Button, Form, InputGroup} from "react-bootstrap";
+import styles from "./SearchUser.module.css";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faSearch} from "@fortawesome/free-solid-svg-icons";
 
 
 export interface SearchTerm {
     searchTerm: string
 }
-
 
 interface Props {
     search: SearchUserStore
@@ -23,71 +21,43 @@ interface Props {
     isAdmin: boolean
 }
 
-const useStyles = makeStyles(theme => ({
-    paper: {
-        marginTop: theme.spacing(8),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    form: {
-        width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(1),
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-    },
-}));
-
 const SearchUser: React.FC<Props> = (props) => {
     const initialValues: SearchTerm = {searchTerm: ""};
-    const classes = useStyles();
 
     async function handleFormSubmit(values: SearchTerm, actions: FormikHelpers<SearchTerm>) {
         await props.searchUser(values.searchTerm);
         actions.setSubmitting(false);
     }
 
-
     return (
-        <Container component="main" maxWidth="xs">
-            <div className={classes.paper}>
-                <Typography component="h1" variant="h5">
-                    Benutzer Suchung
-                </Typography>
+        <div id="SearchUser" className="p-1">
+            <div>
                 <Formik initialValues={initialValues} onSubmit={handleFormSubmit}>
-                    {/* tslint:disable-next-line:jsx-no-multiline-js */}
                     {(formProps: FormikProps<SearchTerm>) => (
-                        <form className={classes.form} noValidate={true} onSubmit={formProps.handleSubmit}>
-                            <TextField
-                                variant="outlined"
-                                margin="normal"
-                                required={true}
-                                fullWidth={true}
-                                id="searchTerm"
-                                label="search term"
-                                name="search term"
-                                value={formProps.values.searchTerm}
-                                onChange={formProps.handleChange}
-                                autoComplete="email"
-                                autoFocus={true}
-                            />
-                            <Button
-                                type="submit"
-                                fullWidth={true}
-                                variant="contained"
-                                color="primary"
-                                disabled={formProps.isSubmitting}
-                                className={classes.submit}
-                            >
-                                Suchen
-                            </Button>
-                        </form>
+                        <Form noValidate onSubmit={formProps.handleSubmit}>
+                            <h3 className={styles.mviHeading}>Projeckmanagement UI</h3>
+                            <Form.Group controlId="formGroupSearch" className={styles.searchBar}>
+                                <InputGroup>
+                                    <Form.Control type="text" name="searchTerm" className={styles.input}
+                                                  value={formProps.values.searchTerm}
+                                                  placeholder={"Benutzersuche mit Email"}
+                                                  onChange={formProps.handleChange}/>
+                                    <InputGroup.Append>
+                                        <Button variant="outline-dark"
+                                                type="submit"
+                                                disabled={formProps.isSubmitting || formProps.values.searchTerm.length === 0}>
+                                            <FontAwesomeIcon icon={faSearch} className={styles.icon}/>
+                                        </Button>
+                                    </InputGroup.Append>
+
+                                </InputGroup>
+                            </Form.Group>
+                        </Form>
                     )}
                 </Formik>
+                
             </div>
-
-        </Container>
+        </div>
     );
 };
 

@@ -1,27 +1,24 @@
 import {UserStore} from "../../store/user/userReducer";
-import React from "react";
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import {makeStyles} from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import {Formik, FormikHelpers, FormikProps} from "formik";
 import {connect} from "react-redux";
 import {RootStore} from "../../store/rootStore";
+import styles from './LoginForm.module.css';
+import classnames from "classnames";
+import Card from "react-bootstrap/Card";
+import ListGroup from "react-bootstrap/ListGroup";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import Logo from './logo.jpg'
+import React from "react";
+import Row from "react-bootstrap/Row";
+import Button from "react-bootstrap/Button";
 import {loginAction} from "../../store/user/userActions";
-import {Formik, FormikHelpers, FormikProps, Field, Form} from "formik";
-import { TextField } from 'formik-material-ui';
-
+import {Form, InputGroup} from "react-bootstrap";
+import {faLock, faUser} from "@fortawesome/free-solid-svg-icons";
 
 export interface LoginCredentials {
     username: string
     password: string
+    rememberMe: boolean
 }
 
 interface Props {
@@ -29,42 +26,9 @@ interface Props {
     loginAction: (credentials: LoginCredentials) => any
 }
 
-function Copyright() {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
-
-const useStyles = makeStyles(theme => ({
-    paper: {
-        marginTop: theme.spacing(8),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-        width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(1),
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-    },
-}));
 
 const LoginForm: React.FC<Props> = (props) => {
-    const classes = useStyles();
-    const initialValues: LoginCredentials = {username: '', password: ''};
+    const initialValues: LoginCredentials = {username: '', password: '', rememberMe: false};
 
     async function handleFormSubmit(values: LoginCredentials, actions: FormikHelpers<LoginCredentials>) {
         await props.loginAction(values);
@@ -72,67 +36,75 @@ const LoginForm: React.FC<Props> = (props) => {
     }
 
     return (
-        <Container component="main" maxWidth="xs">
-            <CssBaseline/>
-            <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon/>
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    Anmeldung
-                </Typography>
-                <Formik initialValues={initialValues} onSubmit={handleFormSubmit}>
-                    {/* tslint:disable-next-line:jsx-no-multiline-js */}
-                    {(formProps: FormikProps<LoginCredentials>) => (
-                        <Form className={classes.form} noValidate={true} onSubmit={formProps.handleSubmit}>
-                            <Field
-                                component={TextField}
-                                name="username"
-                                type="username"
-                                label="Username"
-                            />
-                            <br />
-                            <Field
-                                component={TextField}
-                                type="password"
-                                label="Password"
-                                name="password"
-                            />
-                            <br />
-                            <FormControlLabel
-                                control={<Checkbox value="remember" color="primary"/>}
-                                label="Remember me"
-                            />
-                            <Button
-                                type="submit"
-                                fullWidth={true}
-                                variant="contained"
-                                color="primary"
-                                disabled={formProps.isSubmitting}
-                                className={classes.submit}
-                            >
-                                Anmelden
-                            </Button>
-                            <Grid container={true}>
-                                <Grid item={true} xs={true}>
-                                    <Link href="#" variant="body2">
-                                        Forgot password?
-                                    </Link>
-                                </Grid>
-                                <Grid item={true}>
-                                    <Link href="#" variant="body2">
-                                        {"Don't have an account? Sign Up"}
-                                    </Link>
-                                </Grid>
-                            </Grid>
-                        </Form>
-                    )}
-                </Formik>
-            </div>
-            <Box mt={8}>
-                <Copyright/>
-            </Box>
-        </Container>
+        <Card id="LoginForm" className={styles.card}>
+            <ListGroup variant="flush">
+                <ListGroup.Item>
+                    <div id="mvi-solve-it-logo">
+                        <img alt="MVI SOlVE IT Logo" src={Logo} className={styles.logo}/>
+                    </div>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                    <p className={classnames("pb-4", styles.heading)}>ProjektManagement Board</p>
+                    <Formik initialValues={initialValues} onSubmit={handleFormSubmit}>
+                        {/* tslint:disable-next-line:jsx-no-multiline-js */}
+                        {(formProps: FormikProps<LoginCredentials>) => (
+                            <Form noValidate={true} onSubmit={formProps.handleSubmit} className={"px-5"}>
+                                <Form.Group as={Row} controlId="formGroupEmail">
+                                    <InputGroup>
+                                        <InputGroup.Prepend>
+                                            <InputGroup.Text id="inputGroupPrepend">
+                                                <FontAwesomeIcon icon={faUser}/></InputGroup.Text>
+                                        </InputGroup.Prepend>
+                                        <Form.Control
+                                            type="email"
+                                            name="username"
+                                            value={formProps.values.username}
+                                            onChange={formProps.handleChange}
+                                            placeholder="Email eingeben"
+                                        />
+                                    </InputGroup>
+                                </Form.Group>
+                                <Form.Group as={Row} controlId="formGroupPassword">
+                                    <InputGroup>
+                                        <InputGroup.Prepend>
+                                            <InputGroup.Text id="inputGroupPrepend">
+                                                <FontAwesomeIcon icon={faLock}/>
+                                            </InputGroup.Text>
+                                        </InputGroup.Prepend>
+                                        <Form.Control
+                                            type="password"
+                                            name="password"
+                                            value={formProps.values.password}
+                                            onChange={formProps.handleChange}
+                                            placeholder="Passwort eingeben"
+                                        />
+                                    </InputGroup>
+                                </Form.Group>
+                                <Form.Group as={Row} controlId="formGroupRememberMe">
+                                    <InputGroup>
+                                        <Form.Check
+                                            type="checkbox"
+                                            label="Remember Me"
+                                            value={String(formProps.values.rememberMe)}
+                                            onChange={formProps.handleChange}
+                                        />
+                                    </InputGroup>
+                                </Form.Group>
+                                <Row>
+                                    <Button
+                                        type="submit"
+                                        className={styles.signInButton}
+                                        disabled={formProps.isSubmitting}
+                                    >
+                                        Anmelden
+                                    </Button>
+                                </Row>
+                            </Form>
+                        )}
+                    </Formik>
+                </ListGroup.Item>
+            </ListGroup>
+        </Card>
     );
 };
 

@@ -1,7 +1,7 @@
 import {ErrorTag} from "../../http/errors";
-import {createReducer} from "@reduxjs/toolkit";
 import {SEARCH_USER, SEARCH_USER_FAILURE, SEARCH_USER_SUCCESS} from "./searchUserActions";
 import {RESET_VIEWS} from "../genericActions";
+import {createReducer} from "@reduxjs/toolkit";
 
 export interface UserInformation {
     user_id: number

@@ -8,7 +8,6 @@ import RestClient from "../../http/RestClient";
 import {goTo} from "../router/routerActions";
 import {Route} from "../../Router";
 
-export const ADMIN_ROLE = "ADMIN";
 export const LOGIN = 'LOGIN';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_ERROR = 'LOGIN_ERROR';
@@ -41,7 +40,7 @@ export function loginAction(credentials: LoginCredentials) {
     return async function (dispatch: ThunkDispatch<RootStore,void, AnyAction>) {
         dispatch({type:LOGIN});
         try {
-            await RestClient.post('api/auth/login',credentials);
+            await RestClient.post('api/auth/login?rememberme='+credentials.rememberMe , credentials);
             const {data}: { data: User } = await RestClient.get<User>(ME_ENDPOINT);
 
             validateRoleAfterLogin(data, dispatch);
@@ -55,9 +54,9 @@ function hasSubArray(master :any, sub:any) {
     return sub.every((i => (v: any) => i = master.indexOf(v, i) + 1)(0));
 }
 function validateRoleAfterLogin(userData: User, dispatch: ThunkDispatch<RootStore, void, AnyAction>) {
-    if(hasSubArray([ADMIN, CUSTOMER, DEVELOPER, OPS],userData.roles)) {
+    if(hasSubArray([ADMIN, CUSTOMER, DEVELOPER, OPS], userData.roles)) {
         dispatch(loginSuccessAction(userData));
-        dispatch(goTo(Route.SEARCH_USER));
+       // dispatch(goTo(Route.SEARCH_USER));
     } else {
         dispatch(loginErrorAction())
     }

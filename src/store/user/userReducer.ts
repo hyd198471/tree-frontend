@@ -1,6 +1,6 @@
 import {ErrorTag} from "../../http/errors";
 import {
-    ADMIN_ROLE,
+    ADMIN,
     LOGIN,
     LOGIN_ERROR,
     LOGIN_SUCCESS,
@@ -24,6 +24,7 @@ export interface UserStore {
     userIsAdmin: boolean
     loading: boolean
     errors: ErrorTag[]
+    rememberMe: boolean
 }
 
 const initialState: UserStore = {
@@ -31,7 +32,8 @@ const initialState: UserStore = {
     data: null,
     userIsAdmin: false,
     loading: false,
-    errors: []
+    errors: [],
+    rememberMe:false
 };
 
 export const userReducer = createReducer(initialState, {
@@ -45,7 +47,7 @@ export const userReducer = createReducer(initialState, {
     [LOGIN_SUCCESS]: (state: UserStore, action) =>{
         state.loading = false;
         state.loggedIn = true;
-        state.userIsAdmin = ADMIN_ROLE === action.payload.data.role;
+        state.userIsAdmin = hasSubArray(ADMIN, action.payload.data.roles);
         state.data = action.payload.data;
         state.errors= [];
     },
@@ -74,4 +76,6 @@ export const userReducer = createReducer(initialState, {
     }
 });
 
-
+function hasSubArray(master :any, sub:any) {
+    return sub.every((i => (v: any) => i = master.indexOf(v, i) + 1)(0));
+}

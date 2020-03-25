@@ -1,5 +1,5 @@
 import styles from './Background.module.css';
-import React, {FunctionComponent} from "react";
+import React from "react";
 
 
 const Background: React.FC = () => {
